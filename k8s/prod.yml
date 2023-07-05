@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: api
@@ -13,8 +13,11 @@ spec:
       paths:
       - path: /demo
         backend:
-          serviceName: api
-          servicePort: 8080
+          service:
+            name: api
+            port: 
+              number: 8080
+        pathType: ImplementationSpecific
 
 ---
 
@@ -27,7 +30,7 @@ metadata:
 ---
 
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: db
   namespace: go-demo-3
@@ -38,7 +41,7 @@ rules:
 
 ---
 
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: db
