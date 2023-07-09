@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $serviceName := include "helm.fullname" . -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ template "helm.fullname" . }}
@@ -12,12 +12,16 @@ metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
   - http:
       paths:
       - backend:
-          serviceName: {{ $serviceName }}
-          servicePort: 8080
+          service:
+            name: {{ $serviceName }}
+            port: 
+              number: 8080
+        pathType: "ImplementationSpecific"
     host: {{ .Values.ingress.host }}
 {{- end -}}
